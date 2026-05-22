@@ -850,6 +850,9 @@ export class SoundTouchAccessory {
       // Setup Multi-Room after bass so it appears last
       this.setupGroupSwitch();
 
+      // Store configured presets on device so hardware buttons trigger WebSocket events
+      await this.storePresetsOnDevice();
+
       // Connect WebSocket for real-time updates
       this.setupWebSocket();
 
@@ -1028,6 +1031,32 @@ export class SoundTouchAccessory {
         `${this.accessory.displayName} failed to play preset ${presetId}:`, error,
       );
     }
+  }
+
+  private async storePresetsOnDevice(): Promise<void> {
+    if (!this.deviceConfig.presets || this.deviceConfig.presets.length === 0) {
+      return;
+    }
+
+    for (const preset of this.deviceConfig.presets) {
+      if (!preset.name || !preset.slot) {
+        continue;
+      }
+      try {
+        // Store as UPNP source so hardware button triggers nowSelectionUpdated event
+        await this.client.storePreset(preset.slot, {
+          source: 'UPNP',
+          location: preset.url || preset.nasLocation || preset.spotifyUri || '',
+          sourceAccount: 'UPnPUserName',
+          name: preset.name,
+        });
+      } catch {
+        // Ignore errors - some slots may fail
+      }
+    }
+    this.platform.log.info(
+      `${this.accessory.displayName} stored ${this.deviceConfig.presets.length} preset(s) on device`,
+    );
   }
 
   private async refreshGroupState(): Promise<void> {
