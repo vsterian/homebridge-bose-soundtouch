@@ -1009,6 +1009,15 @@ export class SoundTouchAccessory {
     }
 
     try {
+      // Skip if this device is a slave in a Multi-Room zone
+      // The master handles playback for all slaves
+      if (this.isGrouped) {
+        this.platform.log.debug(
+          `${this.accessory.displayName} is grouped, master handles playback`,
+        );
+        return;
+      }
+
       // Wait for the device to finish processing the button press internally
       // before sending our DLNA command (otherwise the device cancels it)
       await new Promise(r => setTimeout(r, 1500));
