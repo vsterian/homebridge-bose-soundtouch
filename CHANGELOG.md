@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.16.12
+- **Store presets on device at startup** - Configured presets are written to the device on initialization. This ensures hardware button presses trigger the WebSocket event needed for DLNA playback. Fixes hardware buttons on devices with empty preset slots (e.g. SoundTouch 10 after factory reset).
+
+## v1.16.11
+- **Consistent service names** - Multi-Room switch no longer includes the device name prefix. All services (Volume, Bass, Multi-Room) now sort correctly alphabetically.
+
+## v1.16.10
+- **English UI** - Entire Custom UI translated to English.
+
+## v1.16.9
+- **Multi-Room name configurable** - Multi-Room switch name customizable per device.
+
 ## v1.16.7
 - **Custom service names** - Volume, Bass, AUX and Bluetooth names are now configurable per device. HomeKit sorts tiles alphabetically by name, so renaming allows controlling the tile order (e.g. rename "Bass" to "Tiefen" to move it below "Lautstärke").
 - **Konfigurierbare Namen** - Lautstärke, Bass, AUX und Bluetooth Namen pro Gerät einstellbar. HomeKit sortiert alphabetisch nach Name - so lässt sich die Kachel-Reihenfolge steuern.
