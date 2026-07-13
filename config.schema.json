@@ -130,11 +130,23 @@
               "placeholder": "AUX Eingang",
               "description": "Name des AUX-Eingangs in HomeKit / AUX input name in HomeKit"
             },
+            "auxEnabled": {
+              "title": "Enable AUX",
+              "type": "boolean",
+              "default": true,
+              "description": "AUX-Eingang im Eingabemenü anzeigen / Show AUX in the input menu"
+            },
             "bluetoothName": {
               "title": "Bluetooth Name",
               "type": "string",
               "placeholder": "Bluetooth",
               "description": "Name des Bluetooth-Eingangs in HomeKit / Bluetooth input name in HomeKit"
+            },
+            "bluetoothEnabled": {
+              "title": "Enable Bluetooth",
+              "type": "boolean",
+              "default": true,
+              "description": "Bluetooth im Eingabemenü anzeigen / Show Bluetooth in the input menu"
             },
             "presets": {
               "title": "Preset-Belegung",

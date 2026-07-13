@@ -38,7 +38,10 @@ export class SoundTouchAccessory {
   private currentPlayStatus = '';
   private lastActivePresetSlot = 0;
   // Maps sequential HomeKit Identifier → internal action type + slot
-  private inputMap: Array<{ type: 'preset' | 'aux' | 'bluetooth'; slot: number }> = [];
+  private inputMap: Array<{
+    type: 'preset' | 'aux' | 'bluetooth' | 'tv';
+    slot: number;
+  }> = [];
   private presetSwitchServices: Service[] = [];
   private presetSwitchSlots: number[] = [];
 
@@ -370,13 +373,23 @@ export class SoundTouchAccessory {
     }
 
     if (!useButtons) {
-      // Menu mode: AUX and Bluetooth as InputSources
-      this.addInputSource(auxName, 'aux', identifier, 'OTHER');
-      this.inputMap.push({ type: 'aux', slot: 0 });
-      identifier++;
+      // Menu mode: AUX and Bluetooth as optional InputSources
+      if (this.deviceConfig.auxEnabled !== false) {
+        this.addInputSource(auxName, 'aux', identifier, 'OTHER');
+        this.inputMap.push({ type: 'aux', slot: 0 });
+        identifier++;
+      }
 
-      this.addInputSource(btName, 'bluetooth', identifier, 'OTHER');
-      this.inputMap.push({ type: 'bluetooth', slot: 0 });
+      if (this.deviceConfig.bluetoothEnabled !== false) {
+        this.addInputSource(btName, 'bluetooth', identifier, 'OTHER');
+        this.inputMap.push({ type: 'bluetooth', slot: 0 });
+        identifier++;
+      }
+
+      if (this.deviceConfig.tvSourceEnabled === true) {
+        this.addInputSource('TV Source', 'tv-source', identifier, 'OTHER');
+        this.inputMap.push({ type: 'tv', slot: 0 });
+      }
     } else {
       // Button mode: separate Switches for everything
       this.setupPresetButtons();
@@ -745,6 +758,11 @@ export class SoundTouchAccessory {
           this.platform.log.info(
             `${this.accessory.displayName} selected Bluetooth`,
           );
+          break;
+        case 'tv':
+          await this.client.selectSource('PRODUCT', 'TV');
+          this.lastActivePresetSlot = 0;
+          this.platform.log.info(`${this.accessory.displayName} selected TV Source`);
           break;
       }
 

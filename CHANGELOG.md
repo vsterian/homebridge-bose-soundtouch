@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.3
+- **Configurable input menu** - AUX and Bluetooth can be hidden; TV Source appears as the final input-menu item when enabled.
+
 ## v1.0.2
 - **Momentary TV Source control** - TV Source now acts as a button: tapping it selects the TV input and automatically resets to off.
 

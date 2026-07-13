@@ -40,10 +40,12 @@ export interface DeviceConfig {
   volumeName?: string;       // Custom name for volume slider (default: Lautstärke)
   bassName?: string;         // Custom name for bass slider (default: Bass)
   auxName?: string;          // Custom name for AUX input (default: AUX Eingang)
-  bluetoothName?: string;    // Custom name for Bluetooth input (default: Bluetooth)
+  auxEnabled?: boolean;       // Show AUX in the input menu (default: true)
+  bluetoothName?: string;     // Custom name for Bluetooth input (default: Bluetooth)
+  bluetoothEnabled?: boolean; // Show Bluetooth in the input menu (default: true)
   multiRoomName?: string;    // Custom name for Multi-Room switch (default: Multi-Room)
   multiRoomEnabled?: boolean; // Show Multi-Room switch (default: true)
-  tvSourceEnabled?: boolean; // Show momentary TV Source button (default: false)
+  tvSourceEnabled?: boolean; // Show momentary TV Source button and input (default: false)
 }
 
 export interface SoundTouchPlatformConfig extends PlatformConfig {

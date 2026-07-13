@@ -538,9 +538,23 @@
               <label>AUX Name</label>
               <input type="text" value="${device.auxName || ''}" onchange="updateDevice(${i}, 'auxName', this.value)" placeholder="AUX Eingang">
             </div>
+            <div class="form-group" style="flex: 1 1 150px;">
+              <label>AUX</label>
+              <select onchange="updateDevice(${i}, 'auxEnabled', this.value === 'true')">
+                <option value="true" ${device.auxEnabled !== false ? 'selected' : ''}>Enabled</option>
+                <option value="false" ${device.auxEnabled === false ? 'selected' : ''}>Disabled</option>
+              </select>
+            </div>
             <div class="form-group" style="flex: 1 1 200px;">
               <label>Bluetooth Name</label>
               <input type="text" value="${device.bluetoothName || ''}" onchange="updateDevice(${i}, 'bluetoothName', this.value)" placeholder="Bluetooth">
+            </div>
+            <div class="form-group" style="flex: 1 1 150px;">
+              <label>Bluetooth</label>
+              <select onchange="updateDevice(${i}, 'bluetoothEnabled', this.value === 'true')">
+                <option value="true" ${device.bluetoothEnabled !== false ? 'selected' : ''}>Enabled</option>
+                <option value="false" ${device.bluetoothEnabled === false ? 'selected' : ''}>Disabled</option>
+              </select>
             </div>
           </div>
 
