@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.7
+- **Input ordering and synchronization** - Off appears first, TV Source second, presets follow, and manual TV/Off actions update the active input selection.
+
 ## v1.0.6
 - **Preset-style control entries** - Off and TV Source use the same HomeKit input-source type as configured presets.
 

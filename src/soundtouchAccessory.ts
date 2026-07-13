@@ -37,6 +37,8 @@ export class SoundTouchAccessory {
   private currentInputIndex = 0;
   private currentPlayStatus = '';
   private lastActivePresetSlot = 0;
+  private offInputIndex = 0;
+  private tvSourceInputIndex = 0;
   // Maps sequential HomeKit Identifier → internal action type + slot
   private inputMap: Array<{
     type: 'off' | 'preset' | 'aux' | 'bluetooth' | 'tv';
@@ -77,6 +79,18 @@ export class SoundTouchAccessory {
 
     // Initialize device (async - bass and multi-room added after init)
     this.initialize();
+  }
+
+  private updateActiveInputIndex(index: number): void {
+    if (index <= 0) {
+      return;
+    }
+
+    this.currentInputIndex = index;
+    this.televisionService.updateCharacteristic(
+      this.platform.Characteristic.ActiveIdentifier,
+      index,
+    );
   }
 
   private cleanupOldServices(): void {
@@ -359,9 +373,15 @@ export class SoundTouchAccessory {
     const btName = this.deviceConfig.bluetoothName || 'Bluetooth';
 
     if (!useButtons) {
+      this.offInputIndex = identifier;
       // Treat control entries like configured presets so HomeKit lists them in the same menu.
       this.addInputSource('Off', 'preset-off', identifier, 'APPLICATION');
       this.inputMap.push({ type: 'off', slot: 0 });
+      identifier++;
+
+      this.tvSourceInputIndex = identifier;
+      this.addInputSource('TV Source', 'preset-tv-source', identifier, 'APPLICATION');
+      this.inputMap.push({ type: 'tv', slot: 0 });
       identifier++;
 
       // Menu mode: add configured presets as InputSources
@@ -391,8 +411,6 @@ export class SoundTouchAccessory {
         identifier++;
       }
 
-      this.addInputSource('TV Source', 'preset-tv-source', identifier, 'APPLICATION');
-      this.inputMap.push({ type: 'tv', slot: 0 });
     } else {
       // Button mode: separate Switches for everything
       this.setupPresetButtons();
@@ -640,6 +658,7 @@ export class SoundTouchAccessory {
     try {
       await this.client.selectSource('PRODUCT', 'TV');
       this.isPoweredOn = true;
+      this.updateActiveInputIndex(this.tvSourceInputIndex);
       this.updatePowerState();
       this.platform.log.info(`${this.accessory.displayName} selected TV Source`);
     } catch (error) {
@@ -740,6 +759,7 @@ export class SoundTouchAccessory {
         case 'off':
           await this.client.powerOff();
           this.isPoweredOn = false;
+          this.updateActiveInputIndex(this.offInputIndex);
           this.lastActivePresetSlot = 0;
           this.platform.log.info(`${this.accessory.displayName} selected Off`);
           this.updatePowerState();
@@ -773,6 +793,7 @@ export class SoundTouchAccessory {
         case 'tv':
           await this.client.selectSource('PRODUCT', 'TV');
           this.lastActivePresetSlot = 0;
+          this.updateActiveInputIndex(index);
           this.platform.log.info(`${this.accessory.displayName} selected TV Source`);
           break;
       }
@@ -947,24 +968,19 @@ export class SoundTouchAccessory {
   }
 
   private updateInputSourceNames(): void {
-    // Update preset names based on config only - ignore old device presets
-    for (let i = 1; i <= 6; i++) {
-      const configPreset = this.deviceConfig.presets?.find(p => p.slot === i);
-
-      let presetName: string;
-      if (configPreset && configPreset.name) {
-        presetName = configPreset.name;
-      } else {
-        presetName = `Preset ${i}`;
+    // Update preset names based on config only - ignore old device presets.
+    for (const [index, mapping] of this.inputMap.entries()) {
+      if (mapping.type !== 'preset') {
+        continue;
       }
 
-      // Find and update the input service
-      const inputService = this.inputServices.find(s =>
-        s.getCharacteristic(this.platform.Characteristic.Identifier).value === i,
+      const configPreset = this.deviceConfig.presets?.find(
+        p => p.slot === mapping.slot,
       );
-      if (inputService) {
-        inputService.updateCharacteristic(this.platform.Characteristic.ConfiguredName, presetName);
-      }
+      const presetName = configPreset?.name || `Preset ${mapping.slot}`;
+      this.inputServices[index]?.updateCharacteristic(
+        this.platform.Characteristic.ConfiguredName, presetName,
+      );
     }
   }
 
@@ -990,6 +1006,11 @@ export class SoundTouchAccessory {
       }
 
       this.currentPlayStatus = data.playStatus || '';
+      if (data.source === 'STANDBY') {
+        this.updateActiveInputIndex(this.offInputIndex);
+      } else if (data.source === 'PRODUCT' && data.sourceAccount === 'TV') {
+        this.updateActiveInputIndex(this.tvSourceInputIndex);
+      }
       this.tvSourceSwitchService?.updateCharacteristic(
         this.platform.Characteristic.On, false,
       );
@@ -1117,11 +1138,10 @@ export class SoundTouchAccessory {
       this.isPoweredOn = true;
       this.lastActivePresetSlot = presetId;
       this.updatePowerState();
-      this.currentInputIndex = presetId;
-      this.televisionService.updateCharacteristic(
-        this.platform.Characteristic.ActiveIdentifier,
-        presetId,
-      );
+      const presetInputIndex = this.inputMap.findIndex(
+        mapping => mapping.type === 'preset' && mapping.slot === presetId,
+      ) + 1;
+      this.updateActiveInputIndex(presetInputIndex);
       this.updatePresetSwitchStates();
     } catch (error) {
       this.platform.log.error(
@@ -1187,6 +1207,11 @@ export class SoundTouchAccessory {
 
       this.currentVolume = volume.actualvolume;
       this.currentMute = volume.muteenabled;
+      if (nowPlaying.source === 'STANDBY') {
+        this.updateActiveInputIndex(this.offInputIndex);
+      } else if (nowPlaying.source === 'PRODUCT' && nowPlaying.sourceAccount === 'TV') {
+        this.updateActiveInputIndex(this.tvSourceInputIndex);
+      }
       this.isPoweredOn = nowPlaying.source !== 'STANDBY';
       this.tvSourceSwitchService?.updateCharacteristic(
         this.platform.Characteristic.On, false,
@@ -1238,6 +1263,7 @@ export class SoundTouchAccessory {
       } else if (!shouldBeOn && this.isPoweredOn) {
         await this.client.powerOff();
         this.isPoweredOn = false;
+        this.updateActiveInputIndex(this.offInputIndex);
         this.platform.log.info(`${this.accessory.displayName} Power OFF`);
         this.updatePresetSwitchStates();
       }
