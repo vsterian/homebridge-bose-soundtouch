@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.4
+- **Off input** - Adds an `Off` input that powers the speaker down without selecting playback content.
+
 ## v1.0.3
 - **Configurable input menu** - AUX and Bluetooth can be hidden; TV Source appears as the final input-menu item when enabled.
 

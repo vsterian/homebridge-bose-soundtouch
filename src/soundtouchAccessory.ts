@@ -39,7 +39,7 @@ export class SoundTouchAccessory {
   private lastActivePresetSlot = 0;
   // Maps sequential HomeKit Identifier → internal action type + slot
   private inputMap: Array<{
-    type: 'preset' | 'aux' | 'bluetooth' | 'tv';
+    type: 'off' | 'preset' | 'aux' | 'bluetooth' | 'tv';
     slot: number;
   }> = [];
   private presetSwitchServices: Service[] = [];
@@ -357,6 +357,10 @@ export class SoundTouchAccessory {
     const useButtons = this.deviceConfig.presetDisplay === 'buttons';
     const auxName = this.deviceConfig.auxName || 'AUX Eingang';
     const btName = this.deviceConfig.bluetoothName || 'Bluetooth';
+
+    this.addInputSource('Off', 'off', identifier, 'OTHER');
+    this.inputMap.push({ type: 'off', slot: 0 });
+    identifier++;
 
     if (!useButtons) {
       // Menu mode: add configured presets as InputSources
@@ -734,6 +738,14 @@ export class SoundTouchAccessory {
 
     try {
       switch (mapping.type) {
+        case 'off':
+          await this.client.powerOff();
+          this.isPoweredOn = false;
+          this.lastActivePresetSlot = 0;
+          this.platform.log.info(`${this.accessory.displayName} selected Off`);
+          this.updatePowerState();
+          this.updatePresetSwitchStates();
+          return;
         case 'preset': {
           const configPreset = this.deviceConfig.presets?.find(
             p => p.slot === mapping.slot,
