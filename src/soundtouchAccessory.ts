@@ -358,11 +358,11 @@ export class SoundTouchAccessory {
     const auxName = this.deviceConfig.auxName || 'AUX Eingang';
     const btName = this.deviceConfig.bluetoothName || 'Bluetooth';
 
-    this.addInputSource('Off', 'off', identifier, 'OTHER');
-    this.inputMap.push({ type: 'off', slot: 0 });
-    identifier++;
-
     if (!useButtons) {
+      this.addInputSource('Off', 'off', identifier, 'OTHER');
+      this.inputMap.push({ type: 'off', slot: 0 });
+      identifier++;
+
       // Menu mode: add configured presets as InputSources
       for (let i = 1; i <= 6; i++) {
         const configPreset = this.deviceConfig.presets?.find(p => p.slot === i);
@@ -390,10 +390,8 @@ export class SoundTouchAccessory {
         identifier++;
       }
 
-      if (this.deviceConfig.tvSourceEnabled === true) {
-        this.addInputSource('TV Source', 'tv-source', identifier, 'OTHER');
-        this.inputMap.push({ type: 'tv', slot: 0 });
-      }
+      this.addInputSource('TV Source', 'tv-source', identifier, 'OTHER');
+      this.inputMap.push({ type: 'tv', slot: 0 });
     } else {
       // Button mode: separate Switches for everything
       this.setupPresetButtons();

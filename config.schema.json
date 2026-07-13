@@ -92,7 +92,7 @@
                 { "title": "Menü / Menu (Dropdown)", "enum": ["menu"] },
                 { "title": "Einzelne Buttons / Separate Buttons", "enum": ["buttons"] }
               ],
-              "description": "Presets als Dropdown-Menü oder einzelne Schalter in HomeKit / Show presets as dropdown menu or separate switches"
+              "description": "Menu includes Off, presets, AUX, Bluetooth and TV Source; buttons mode shows separate preset switches"
             },
             "volumeName": {
               "title": "Volume Name",

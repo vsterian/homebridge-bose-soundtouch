@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.5
+- **Menu-mode inputs** - `Off` and `TV Source` now always appear in the HomeKit input menu when `Preset Display` is `Menu (Dropdown)`.
+
 ## v1.0.4
 - **Off input** - Adds an `Off` input that powers the speaker down without selecting playback content.
 

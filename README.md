@@ -18,7 +18,7 @@ A Homebridge plugin for controlling Bose SoundTouch speakers via Apple HomeKit.
 - **Spotify & Amazon Music** - Streaming services still supported
 - **Multi-Room** - Group speakers via HomeKit switch - one tap to add/remove a speaker from the zone. Master is auto-detected.
 - **Optional TV Source** - Enable a momentary HomeKit button and final input-menu item that selects the Bose TV input
-- **Off Input** - Select `Off` from the input menu to power the speaker down without starting playback
+- **Off Input** - In Menu (Dropdown) mode, select `Off` from the input menu to power the speaker down without starting playback
 - **Auto-Reconnect** - Offline devices retry every 30 seconds
 - **Real-time Updates** - WebSocket connection for instant status changes in HomeKit
 - **Volume Slider** - Volume as brightness slider in Home app
@@ -201,7 +201,7 @@ Each speaker has a "Group" switch in HomeKit. When turned on, the speaker joins 
 
 ### TV Source
 
-The input menu starts with `Off`, followed by presets, AUX, Bluetooth, and TV Source. Selecting `Off` powers the speaker down. Set `tvSourceEnabled` to `true` for a linked momentary "TV Source" button and final input-menu item. Tapping either sends `POST /select` with `source="PRODUCT"` and `sourceAccount="TV"`, then resets the button to off. It does not power the speaker down. Set `auxEnabled` or `bluetoothEnabled` to `false` to hide those entries from the input menu.
+In Menu (Dropdown) mode, input menu starts with `Off`, followed by presets, AUX, Bluetooth, and TV Source. Selecting `Off` powers the speaker down. TV Source always appears as final input-menu item. Set `tvSourceEnabled` to `true` for linked momentary "TV Source" button. Tapping either sends `POST /select` with `source="PRODUCT"` and `sourceAccount="TV"`, then resets button to off. It does not power speaker down. Set `auxEnabled` or `bluetoothEnabled` to `false` to hide those entries from input menu.
 
 ### IP Management
 
