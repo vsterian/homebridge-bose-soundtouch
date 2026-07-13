@@ -6,4 +6,4 @@ export const PLATFORM_NAME = 'BoseSoundTouch';
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-bose-soundtouch';
+export const PLUGIN_NAME = 'homebridge-bose-soundtouch-tv-source';
