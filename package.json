@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vsterian/homebridge-bose-soundtouch.git"
+    "url": "git+https://github.com/vsterian/homebridge-bose-soundtouch.git"
   },
   "bugs": {
     "url": "https://github.com/vsterian/homebridge-bose-soundtouch/issues"
