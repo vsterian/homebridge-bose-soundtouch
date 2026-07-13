@@ -1,7 +1,7 @@
 {
-  "name": "homebridge-bose-soundtouch",
-  "version": "1.16.14",
-  "description": "Homebridge plugin for Bose SoundTouch speakers with custom radio stations and streaming support",
+  "name": "homebridge-bose-soundtouch-tv-source",
+  "version": "1.0.0",
+  "description": "Homebridge plugin for Bose SoundTouch speakers with optional TV Source control",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src/**.ts --max-warnings=0",
@@ -15,16 +15,17 @@
     "soundtouch",
     "speaker",
     "audio",
-    "multiroom"
+    "multiroom",
+    "tv-source"
   ],
   "author": "Daniel",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dress13/homebridge-bose-soundtouch.git"
+    "url": "https://github.com/vsterian/homebridge-bose-soundtouch.git"
   },
   "bugs": {
-    "url": "https://github.com/Dress13/homebridge-bose-soundtouch/issues"
+    "url": "https://github.com/vsterian/homebridge-bose-soundtouch/issues"
   },
   "engines": {
     "node": "^18.17.0 || ^20.9.0 || ^22 || ^24",
@@ -48,5 +49,5 @@
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   },
-  "homepage": "https://github.com/Dress13/homebridge-bose-soundtouch#readme"
+  "homepage": "https://github.com/vsterian/homebridge-bose-soundtouch#readme"
 }

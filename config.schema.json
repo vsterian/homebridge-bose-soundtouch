@@ -4,7 +4,7 @@
   "singular": true,
   "customUi": true,
   "headerDisplay": "Homebridge Plugin für Bose SoundTouch Lautsprecher - Mit Custom Radio & Streaming Stationen.",
-  "footerDisplay": "Weitere Informationen: [GitHub](https://github.com/Dress13/homebridge-bose-soundtouch)",
+  "footerDisplay": "Weitere Informationen: [GitHub](https://github.com/vsterian/homebridge-bose-soundtouch)",
   "schema": {
     "type": "object",
     "properties": {

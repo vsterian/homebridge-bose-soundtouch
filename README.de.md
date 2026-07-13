@@ -41,13 +41,13 @@ Die Bose SoundTouch Cloud wurde am 6. Mai 2026 abgeschaltet. Dieses Plugin erset
 
 ### Über Homebridge UI
 
-1. Suche nach `homebridge-bose-soundtouch` in der Plugin-Suche
+1. Suche nach `homebridge-bose-soundtouch-tv-source` in der Plugin-Suche
 2. Klicke auf "Installieren"
 
 ### Manuell via npm
 
 ```bash
-npm install -g homebridge-bose-soundtouch
+npm install -g homebridge-bose-soundtouch-tv-source
 ```
 
 ## Geräte zu HomeKit hinzufügen
