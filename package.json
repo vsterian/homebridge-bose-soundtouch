@@ -1,6 +1,6 @@
 {
   "name": "homebridge-bose-soundtouch-tv-source",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Homebridge plugin for Bose SoundTouch speakers with optional TV Source control",
   "main": "dist/index.js",
   "scripts": {

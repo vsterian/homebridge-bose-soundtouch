@@ -43,7 +43,7 @@ export interface DeviceConfig {
   bluetoothName?: string;    // Custom name for Bluetooth input (default: Bluetooth)
   multiRoomName?: string;    // Custom name for Multi-Room switch (default: Multi-Room)
   multiRoomEnabled?: boolean; // Show Multi-Room switch (default: true)
-  tvSourceEnabled?: boolean; // Show TV Source switch (default: false)
+  tvSourceEnabled?: boolean; // Show momentary TV Source button (default: false)
 }
 
 export interface SoundTouchPlatformConfig extends PlatformConfig {

@@ -122,7 +122,7 @@
               "title": "Enable TV Source",
               "type": "boolean",
               "default": false,
-              "description": "TV-Source-Schalter anzeigen / Show the TV Source switch"
+              "description": "TV-Source-Taste anzeigen / Show the momentary TV Source button"
             },
             "auxName": {
               "title": "AUX Name",

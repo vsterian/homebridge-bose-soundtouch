@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.2
+- **Momentary TV Source control** - TV Source now acts as a button: tapping it selects the TV input and automatically resets to off.
+
 ## v1.16.12
 - **Store presets on device at startup** - Configured presets are written to the device on initialization. This ensures hardware button presses trigger the WebSocket event needed for DLNA playback. Fixes hardware buttons on devices with empty preset slots (e.g. SoundTouch 10 after factory reset).
 

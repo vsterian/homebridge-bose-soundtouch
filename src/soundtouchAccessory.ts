@@ -34,7 +34,6 @@ export class SoundTouchAccessory {
   private currentMute = false;
   private isPoweredOn = false;
   private isGrouped = false;
-  private currentSource = '';
   private currentInputIndex = 0;
   private currentPlayStatus = '';
   private lastActivePresetSlot = 0;
@@ -607,33 +606,34 @@ export class SoundTouchAccessory {
       .setValue(sourceName);
 
     this.tvSourceSwitchService.getCharacteristic(this.platform.Characteristic.On)
-      .onGet(() => this.currentSource === 'PRODUCT')
+      .onGet(() => false)
       .onSet(async (value: CharacteristicValue) => {
-        await this.handleTVSourceSwitch(value as boolean);
+        if (value) {
+          await this.handleTVSourceSwitch();
+        } else {
+          this.tvSourceSwitchService?.updateCharacteristic(
+            this.platform.Characteristic.On, false,
+          );
+        }
       });
 
     this.televisionService.addLinkedService(this.tvSourceSwitchService);
   }
 
-  private async handleTVSourceSwitch(value: boolean): Promise<void> {
+  private async handleTVSourceSwitch(): Promise<void> {
     try {
-      if (value) {
-        await this.client.selectSource('PRODUCT', 'TV');
-        this.currentSource = 'PRODUCT';
-        this.isPoweredOn = true;
-        this.updatePowerState();
-        this.platform.log.info(`${this.accessory.displayName} selected TV Source`);
-      } else {
-        await this.client.powerOff();
-        this.currentSource = 'STANDBY';
-        this.isPoweredOn = false;
-        this.updatePowerState();
-        this.platform.log.info(`${this.accessory.displayName} TV Source OFF`);
-      }
+      await this.client.selectSource('PRODUCT', 'TV');
+      this.isPoweredOn = true;
+      this.updatePowerState();
+      this.platform.log.info(`${this.accessory.displayName} selected TV Source`);
     } catch (error) {
       this.platform.log.error('Failed to update TV Source:', error);
       throw new this.platform.api.hap.HapStatusError(
         this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE,
+      );
+    } finally {
+      this.tvSourceSwitchService?.updateCharacteristic(
+        this.platform.Characteristic.On, false,
       );
     }
   }
@@ -960,10 +960,9 @@ export class SoundTouchAccessory {
         this.platform.log.info(`${this.accessory.displayName} Power: ${this.isPoweredOn ? 'ON' : 'OFF'}`);
       }
 
-      this.currentSource = data.source;
       this.currentPlayStatus = data.playStatus || '';
       this.tvSourceSwitchService?.updateCharacteristic(
-        this.platform.Characteristic.On, this.currentSource === 'PRODUCT',
+        this.platform.Characteristic.On, false,
       );
       this.platform.log.debug(`${this.accessory.displayName} Source: ${data.source}, Playing: ${data.playStatus}`);
 
@@ -1159,10 +1158,9 @@ export class SoundTouchAccessory {
 
       this.currentVolume = volume.actualvolume;
       this.currentMute = volume.muteenabled;
-      this.currentSource = nowPlaying.source;
       this.isPoweredOn = nowPlaying.source !== 'STANDBY';
       this.tvSourceSwitchService?.updateCharacteristic(
-        this.platform.Characteristic.On, this.currentSource === 'PRODUCT',
+        this.platform.Characteristic.On, false,
       );
 
       this.updatePowerState();
