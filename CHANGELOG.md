@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.6
+- **Preset-style control entries** - Off and TV Source use the same HomeKit input-source type as configured presets.
+
 ## v1.0.5
 - **Menu-mode inputs** - `Off` and `TV Source` now always appear in the HomeKit input menu when `Preset Display` is `Menu (Dropdown)`.
 

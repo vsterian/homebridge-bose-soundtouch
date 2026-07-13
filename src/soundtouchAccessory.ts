@@ -359,7 +359,8 @@ export class SoundTouchAccessory {
     const btName = this.deviceConfig.bluetoothName || 'Bluetooth';
 
     if (!useButtons) {
-      this.addInputSource('Off', 'off', identifier, 'OTHER');
+      // Treat control entries like configured presets so HomeKit lists them in the same menu.
+      this.addInputSource('Off', 'preset-off', identifier, 'APPLICATION');
       this.inputMap.push({ type: 'off', slot: 0 });
       identifier++;
 
@@ -390,7 +391,7 @@ export class SoundTouchAccessory {
         identifier++;
       }
 
-      this.addInputSource('TV Source', 'tv-source', identifier, 'OTHER');
+      this.addInputSource('TV Source', 'preset-tv-source', identifier, 'APPLICATION');
       this.inputMap.push({ type: 'tv', slot: 0 });
     } else {
       // Button mode: separate Switches for everything
